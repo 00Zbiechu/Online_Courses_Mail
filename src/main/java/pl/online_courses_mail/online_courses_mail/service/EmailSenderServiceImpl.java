@@ -1,25 +1,43 @@
 package pl.online_courses_mail.online_courses_mail.service;
 
+import io.vavr.control.Try;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @Component
 @RequiredArgsConstructor
 public class EmailSenderServiceImpl implements EmailSenderService {
 
     private final JavaMailSender javaMailSender;
+    private final TemplateEngine templateEngine;
 
     @Override
-    public void sendEmail(String toEmail, String subject, String body) {
+    public void sendRegistrationEmail(String email, String username) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("***REMOVED***");
-        message.setTo(toEmail);
-        message.setText(body);
-        message.setSubject(subject);
+        Try.run(() -> {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 
-        javaMailSender.send(message);
+            Context context = new Context();
+            context.setVariable("username", username);
+
+            helper.setFrom("***REMOVED***");
+            helper.setTo(email);
+            helper.setSubject("Welcome " + username);
+            String htmlContent = templateEngine.process("registration-template", context);
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+
+        }).onFailure(mail -> {
+            //TODO: Add CustomErrorException
+            throw new RuntimeException("Email error");
+        });
     }
 }
