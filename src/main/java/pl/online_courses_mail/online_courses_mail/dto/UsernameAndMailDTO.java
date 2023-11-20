@@ -1,4 +1,4 @@
-package pl.online_courses_mail.online_courses_mail.kafka.dto;
+package pl.online_courses_mail.online_courses_mail.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

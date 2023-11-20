@@ -3,12 +3,12 @@ package pl.online_courses_mail.online_courses_mail.service;
 import io.vavr.control.Try;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import pl.online_courses_mail.online_courses_mail.exception.EmailErrorException;
 
 @Component
 @RequiredArgsConstructor
@@ -36,8 +36,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             javaMailSender.send(mimeMessage);
 
         }).onFailure(mail -> {
-            //TODO: Add CustomErrorException
-            throw new RuntimeException("Email error");
+            throw new EmailErrorException("Email error");
         });
     }
 }

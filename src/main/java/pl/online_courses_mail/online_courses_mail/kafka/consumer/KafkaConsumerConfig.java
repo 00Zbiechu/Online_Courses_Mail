@@ -1,4 +1,4 @@
-package pl.online_courses_mail.online_courses_mail.kafka.config;
+package pl.online_courses_mail.online_courses_mail.kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -9,7 +9,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import pl.online_courses_mail.online_courses_mail.kafka.dto.UsernameAndMailDTO;
+import pl.online_courses_mail.online_courses_mail.dto.UsernameAndMailDTO;
 
 import java.util.HashMap;
 import java.util.Map;

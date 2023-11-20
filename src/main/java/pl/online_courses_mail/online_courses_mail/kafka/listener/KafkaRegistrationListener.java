@@ -1,13 +1,13 @@
-package pl.online_courses_mail.online_courses_mail.kafka;
+package pl.online_courses_mail.online_courses_mail.kafka.listener;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.online_courses_mail.online_courses_mail.kafka.dto.UsernameAndMailDTO;
+import pl.online_courses_mail.online_courses_mail.dto.UsernameAndMailDTO;
 import pl.online_courses_mail.online_courses_mail.service.EmailSenderService;
 
 @Component
 @RequiredArgsConstructor
-public class EmailListener {
+public class KafkaRegistrationListener {
 
     private final EmailSenderService emailSenderService;
 
