@@ -13,7 +13,7 @@ public class KafkaRegistrationListener {
 
     @org.springframework.kafka.annotation.KafkaListener(
             topics = "registration",
-            groupId = "courses",
+            groupId = "registration",
             containerFactory = "registrationFactory"
     )
     void sendMail(UsernameAndMailDTO usernameAndMailDTO) {
