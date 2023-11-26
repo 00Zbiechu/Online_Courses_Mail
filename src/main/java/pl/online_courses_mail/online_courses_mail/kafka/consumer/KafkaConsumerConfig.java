@@ -1,5 +1,7 @@
 package pl.online_courses_mail.online_courses_mail.kafka.consumer;
 
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +11,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.support.serializer.JsonDeserializer;
-import pl.online_courses_mail.online_courses_mail.dto.UsernameAndMailDTO;
+import pl.online_courses_mail.online_courses_mail.event.UserAndMailDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,33 +23,32 @@ public class KafkaConsumerConfig {
     @Value("${online-courses.kafka.topics.email.trusted-packages}")
     private String trustedPackages;
 
+    @Value("${spring.kafka.producer.schema.registry.url}")
+    String schemaRegistryUrl;
+
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServer;
 
     private Map<String, Object> consumerConfig() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServer);
+        props.put(ConsumerConfig.RECONNECT_BACKOFF_MS_CONFIG, "5000");
+        props.put(ConsumerConfig.RETRY_BACKOFF_MS_CONFIG, "5000");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KafkaAvroDeserializer.class);
+        props.put("schema.registry.url", schemaRegistryUrl);
+        props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, "true");
         return props;
     }
 
     @Bean
-    public ConsumerFactory<String, UsernameAndMailDTO> registrationConsumerFactory() {
-        JsonDeserializer<UsernameAndMailDTO> deserializer = new JsonDeserializer<>(UsernameAndMailDTO.class);
-        deserializer.setRemoveTypeHeaders(false);
-        deserializer.addTrustedPackages(trustedPackages);
-        deserializer.setUseTypeMapperForKey(true);
-
-        return new DefaultKafkaConsumerFactory<>(
-                consumerConfig(),
-                new StringDeserializer(),
-                deserializer);
+    public ConsumerFactory<String, UserAndMailDTO> registrationConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfig());
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, UsernameAndMailDTO> registrationFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, UsernameAndMailDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, UserAndMailDTO> registrationFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, UserAndMailDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(registrationConsumerFactory());
         return factory;
     }

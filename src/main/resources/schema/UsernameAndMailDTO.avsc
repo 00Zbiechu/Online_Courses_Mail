@@ -1,0 +1,16 @@
+{
+  "fields": [
+    {
+      "name": "username",
+      "type": "string"
+    },
+    {
+      "name": "mail",
+      "type": "string"
+    }
+  ],
+  "name": "UserAndMailDTO",
+  "namespace": "pl.online_courses_mail.online_courses_mail.event",
+  "type": "record",
+  "version": "1"
+}
