@@ -1,9 +1,10 @@
 package pl.online_courses_mail.online_courses_mail.kafka.listener;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import pl.online_courses_mail.online_courses_mail.event.UserAndMailDTO;
+import pl.courses.online_courses_backend.event.UsernameAndMailDTO;
 import pl.online_courses_mail.online_courses_mail.service.EmailSenderService;
 
 @Component
@@ -13,7 +14,7 @@ public class KafkaRegistrationListener {
     private final EmailSenderService emailSenderService;
 
     @KafkaListener(topics = "${online-courses.kafka.topics.email.name}", groupId = "${online-courses.kafka.topics.email.group}", containerFactory = "registrationFactory")
-    void sendMail(UserAndMailDTO userAndMailDTO) {
-        emailSenderService.sendRegistrationEmail(userAndMailDTO.getMail().toString(), userAndMailDTO.getUsername().toString());
+    void sendMail(ConsumerRecord<String, UsernameAndMailDTO> consumerRecord) {
+        emailSenderService.sendRegistrationEmail(consumerRecord.value().getMail().toString(), consumerRecord.value().getUsername().toString());
     }
 }
