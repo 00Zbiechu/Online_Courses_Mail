@@ -18,7 +18,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     private final TemplateEngine templateEngine;
 
     @Override
-    public void sendRegistrationEmail(String email, String username) {
+    public void sendRegistrationEmail(String email, String username, String confirmationLink) {
 
         Try.run(() -> {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -26,6 +26,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
             Context context = new Context();
             context.setVariable("username", username);
+            context.setVariable("confirmationLink", confirmationLink);
 
             helper.setFrom("***REMOVED***");
             helper.setTo(email);
