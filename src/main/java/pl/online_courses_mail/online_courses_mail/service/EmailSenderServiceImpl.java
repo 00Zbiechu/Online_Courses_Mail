@@ -37,7 +37,31 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             javaMailSender.send(mimeMessage);
 
         }).onFailure(mail -> {
-            throw new EmailErrorException("Email error");
+            throw new EmailErrorException("Registration email error");
+        });
+    }
+
+    @Override
+    public void sendParticipationConfirmationEmail(String email, String title, String confirmationLink) {
+
+        Try.run(() -> {
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+            Context context = new Context();
+            context.setVariable("title", title);
+            context.setVariable("confirmationLink", confirmationLink);
+
+            helper.setFrom("***REMOVED***");
+            helper.setTo(email);
+            helper.setSubject("Invitation to Join Course");
+            String htmlContent = templateEngine.process("participationCourse-template", context);
+            helper.setText(htmlContent, true);
+
+            javaMailSender.send(mimeMessage);
+
+        }).onFailure(mail -> {
+            throw new EmailErrorException("Registration email error");
         });
     }
 }

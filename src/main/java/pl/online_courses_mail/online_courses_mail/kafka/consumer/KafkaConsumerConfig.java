@@ -11,6 +11,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import pl.courses.online_courses_backend.event.CourseConfirmationDTO;
 import pl.courses.online_courses_backend.event.UsernameAndMailDTO;
 
 import java.util.HashMap;
@@ -46,6 +47,18 @@ public class KafkaConsumerConfig {
     public ConcurrentKafkaListenerContainerFactory<String, UsernameAndMailDTO> registrationFactory() {
         ConcurrentKafkaListenerContainerFactory<String, UsernameAndMailDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(registrationConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, CourseConfirmationDTO> participationCourseConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(consumerConfig());
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, CourseConfirmationDTO> participationCourseFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, CourseConfirmationDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(participationCourseConsumerFactory());
         return factory;
     }
 }

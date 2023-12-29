@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome in OnlineCourses</title>
+</head>
+
+<body>
+<h1>Invitation to Join Course!</h1>
+<b th:text="${title}"></b>
+<p>You have been invited to participate in our course! To gain access to the course content, please click the "Accept
+    Invitation" button below.</p>
+
+<br>
+<a th:href="${confirmationLink}">
+    <button>Accept Invitation</button>
+</a>
+<br>
+
+<p>Thank you for joining us on this learning journey!</p>
+
+<p>Best Regards,<br> OnlineCourses Team</p>
+</body>
+
+</html>

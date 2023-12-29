@@ -13,7 +13,7 @@ public class KafkaRegistrationListener {
 
     private final EmailSenderService emailSenderService;
 
-    @KafkaListener(topics = "${online-courses.kafka.topics.email.name}", groupId = "${online-courses.kafka.topics.email.group}", containerFactory = "registrationFactory")
+    @KafkaListener(topics = "${online-courses.kafka.topics.email.registration.name}", groupId = "${online-courses.kafka.topics.email.registration.group}", containerFactory = "registrationFactory")
     void sendMail(ConsumerRecord<String, UsernameAndMailDTO> consumerRecord) {
         emailSenderService.sendRegistrationEmail(consumerRecord.value().getMail().toString(), consumerRecord.value().getUsername().toString(), consumerRecord.value().getConfirmationLink().toString());
     }
