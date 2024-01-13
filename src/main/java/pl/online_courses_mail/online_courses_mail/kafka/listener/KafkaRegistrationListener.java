@@ -15,6 +15,10 @@ public class KafkaRegistrationListener {
 
     @KafkaListener(topics = "${online-courses.kafka.topics.email.registration.name}", groupId = "${online-courses.kafka.topics.email.registration.group}", containerFactory = "registrationFactory")
     void sendMail(ConsumerRecord<String, UsernameAndMailDTO> consumerRecord) {
-        emailSenderService.sendRegistrationEmail(consumerRecord.value().getMail().toString(), consumerRecord.value().getUsername().toString(), consumerRecord.value().getConfirmationLink().toString());
+        emailSenderService.sendRegistrationEmail(
+                consumerRecord.value().getMail().toString(),
+                consumerRecord.value().getUsername().toString(),
+                consumerRecord.value().getConfirmationLink().toString()
+        );
     }
 }
