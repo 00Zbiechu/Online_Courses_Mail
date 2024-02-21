@@ -11,8 +11,8 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import pl.courses.online_courses_backend.event.CourseConfirmationDTO;
-import pl.courses.online_courses_backend.event.UsernameAndMailDTO;
+import pl.online_courses_mail.online_courses_mail.model.dto.CourseConfirmationDTO;
+import pl.online_courses_mail.online_courses_mail.model.dto.UsernameAndMailDTO;
 
 import java.util.HashMap;
 import java.util.Map;
